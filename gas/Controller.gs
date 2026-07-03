@@ -5,7 +5,7 @@
  * Coordinates future UI requests and routes them to the appropriate services.
  *
  * Current scope:
- * Exposes Master Cabang and Master Karyawan read helpers for future UI dropdown usage.
+ * Exposes Master Cabang, Master Karyawan, and Absensi helpers for UI usage.
  */
 
 /**
@@ -48,4 +48,25 @@ function getActiveMasterKaryawan() {
  */
 function getMasterKaryawanDropdownByCabang(cabang) {
   return getKaryawanDropdownOptionsByCabang(cabang);
+}
+
+/**
+ * Initializes Absensi from a manual Apps Script run or future admin flow.
+ */
+function initializeAbsensi() {
+  return setupAbsensi();
+}
+
+/**
+ * Submits an Absensi record from UI or manual Apps Script test.
+ */
+function createAbsensi(data) {
+  return submitAbsensi(data);
+}
+
+/**
+ * Returns all Absensi records.
+ */
+function getRekapAbsensi() {
+  return getAbsensiRecords();
 }
