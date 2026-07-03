@@ -5,6 +5,19 @@
  * Coordinates future UI requests and routes them to the appropriate services.
  *
  * Current scope:
- * Architecture placeholder only. No request handling is implemented yet.
+ * Exposes Master Cabang read helpers for future UI dropdown usage.
  */
 
+/**
+ * Initializes Master Cabang from a manual Apps Script run or future admin flow.
+ */
+function initializeMasterCabang() {
+  return setupMasterCabang();
+}
+
+/**
+ * Returns active Master Cabang options for UI dropdowns.
+ */
+function getMasterCabangDropdown() {
+  return getCabangDropdownOptions();
+}
