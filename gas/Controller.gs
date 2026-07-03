@@ -5,7 +5,7 @@
  * Coordinates future UI requests and routes them to the appropriate services.
  *
  * Current scope:
- * Exposes Master Cabang read helpers for future UI dropdown usage.
+ * Exposes Master Cabang and Master Karyawan read helpers for future UI dropdown usage.
  */
 
 /**
@@ -20,4 +20,32 @@ function initializeMasterCabang() {
  */
 function getMasterCabangDropdown() {
   return getCabangDropdownOptions();
+}
+
+/**
+ * Initializes Master Karyawan from a manual Apps Script run or future admin flow.
+ */
+function initializeMasterKaryawan() {
+  return setupMasterKaryawan();
+}
+
+/**
+ * Returns all Master Karyawan records.
+ */
+function getMasterKaryawan() {
+  return getMasterKaryawanList();
+}
+
+/**
+ * Returns active Master Karyawan records.
+ */
+function getActiveMasterKaryawan() {
+  return getActiveKaryawanList();
+}
+
+/**
+ * Returns active Master Karyawan dropdown options filtered by cabang code.
+ */
+function getMasterKaryawanDropdownByCabang(cabang) {
+  return getKaryawanDropdownOptionsByCabang(cabang);
 }
