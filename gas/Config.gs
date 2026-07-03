@@ -5,13 +5,14 @@
  * Centralizes project-wide configuration keys and constants for EXPOS.
  *
  * Current scope:
- * Stores shared configuration for the Master Cabang foundation.
+ * Stores shared configuration for Master Cabang and Master Karyawan.
  */
 
 var EXPOS_CONFIG = {
   SCRIPT_PROPERTY_SPREADSHEET_ID: 'EXPOS_SPREADSHEET_ID',
   SHEETS: {
-    MASTER_CABANG: 'Master Cabang'
+    MASTER_CABANG: 'Master Cabang',
+    MASTER_KARYAWAN: 'Master Karyawan'
   },
   MASTER_CABANG: {
     HEADERS: ['Nama Cabang', 'Kode Cabang', 'Status'],
@@ -20,6 +21,16 @@ var EXPOS_CONFIG = {
       ['EXP Gaming Cibinong', 'CBN', 'Aktif'],
       ['EXP Gaming Ar Hakim', 'ARH', 'Aktif'],
       ['EXP Gaming Siliwangi', 'SLW', 'Aktif']
+    ]
+  },
+  MASTER_KARYAWAN: {
+    HEADERS: ['ID Karyawan', 'Nama Karyawan', 'Cabang', 'Jabatan', 'Status'],
+    STATUS_AKTIF: 'Aktif',
+    STATUS_NONAKTIF: 'Nonaktif',
+    DEFAULT_ROWS: [
+      ['CBN-001', 'Contoh Karyawan Cibinong', 'CBN', 'Crew', 'Aktif'],
+      ['ARH-001', 'Contoh Karyawan Ar Hakim', 'ARH', 'Crew', 'Aktif'],
+      ['SLW-001', 'Contoh Karyawan Siliwangi', 'SLW', 'Crew', 'Aktif']
     ]
   }
 };
