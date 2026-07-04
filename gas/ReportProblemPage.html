@@ -1,0 +1,102 @@
+<section class="expos-section" data-expos-page="reportProblem" hidden>
+  <div class="expos-stack">
+    <div class="expos-card expos-card-lg">
+      <button class="expos-button expos-button-secondary" type="button" data-expos-back>← Kembali</button>
+      <h1 class="expos-title" style="margin-top:16px;">Report Problem</h1>
+      <p class="expos-muted" style="margin-bottom:0;">Laporkan masalah operasional agar cepat ditindaklanjuti.</p>
+    </div>
+
+    <form class="expos-card expos-stack" id="reportProblemForm">
+      <div>
+        <label class="expos-label" for="reportProblemCabang">Cabang</label>
+        <select class="expos-select" id="reportProblemCabang" name="cabang" required>
+          <option value="">Pilih cabang</option>
+          <option value="CBN">EXP Gaming Cibinong</option>
+          <option value="ARH">EXP Gaming Ar Hakim</option>
+          <option value="SLW">EXP Gaming Siliwangi</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="expos-label" for="reportProblemPelapor">ID Pelapor</label>
+        <input class="expos-input" id="reportProblemPelapor" name="idPelapor" placeholder="Contoh: CBN-001" required>
+      </div>
+
+      <div>
+        <label class="expos-label" for="reportProblemJudul">Judul Problem</label>
+        <input class="expos-input" id="reportProblemJudul" name="judulProblem" placeholder="Contoh: Stick PS rusak" required>
+      </div>
+
+      <div>
+        <label class="expos-label" for="reportProblemDeskripsi">Deskripsi Problem</label>
+        <textarea class="expos-textarea" id="reportProblemDeskripsi" name="deskripsiProblem" placeholder="Jelaskan masalah secara singkat dan jelas" required></textarea>
+      </div>
+
+      <div>
+        <label class="expos-label" for="reportProblemFoto">Foto Problem</label>
+        <input class="expos-input" id="reportProblemFoto" name="fotoUrl" placeholder="Tempel URL foto dari Drive" required>
+      </div>
+
+      <div>
+        <label class="expos-label" for="reportProblemNamaFile">Nama File Foto</label>
+        <input class="expos-input" id="reportProblemNamaFile" name="namaFileFoto" placeholder="Opsional">
+      </div>
+
+      <button class="expos-button" type="submit" id="reportProblemSubmitButton">Kirim Report</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  function exposShowReportProblemSnackbar(message) {
+    var snackbar = document.createElement('div');
+    snackbar.className = 'expos-snackbar';
+    snackbar.textContent = message;
+    document.body.appendChild(snackbar);
+
+    setTimeout(function() {
+      snackbar.remove();
+    }, 2400);
+  }
+
+  function exposBindReportProblemForm() {
+    var form = document.getElementById('reportProblemForm');
+    var button = document.getElementById('reportProblemSubmitButton');
+
+    if (!form || !button) {
+      return;
+    }
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var payload = {
+        cabang: form.cabang.value,
+        idPelapor: form.idPelapor.value,
+        judulProblem: form.judulProblem.value,
+        deskripsiProblem: form.deskripsiProblem.value,
+        fotoUrl: form.fotoUrl.value,
+        namaFileFoto: form.namaFileFoto.value
+      };
+
+      button.disabled = true;
+      button.textContent = 'Mengirim...';
+
+      google.script.run
+        .withSuccessHandler(function() {
+          form.reset();
+          button.disabled = false;
+          button.textContent = 'Kirim Report';
+          exposShowReportProblemSnackbar('Report problem berhasil dikirim ✅');
+        })
+        .withFailureHandler(function(error) {
+          button.disabled = false;
+          button.textContent = 'Kirim Report';
+          exposShowReportProblemSnackbar(error.message || 'Report problem gagal dikirim');
+        })
+        .createReportProblem(payload);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', exposBindReportProblemForm);
+</script>
