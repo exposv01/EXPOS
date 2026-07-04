@@ -1,0 +1,185 @@
+<style>
+  :root {
+    --expos-width-primary: 390px;
+    --expos-width-max: 430px;
+    --expos-grid: 8px;
+    --expos-space-1: 8px;
+    --expos-space-2: 16px;
+    --expos-space-3: 24px;
+    --expos-space-4: 32px;
+    --expos-space-5: 40px;
+    --expos-space-6: 48px;
+
+    --expos-navy: #072866;
+    --expos-blue: #0b4fd6;
+    --expos-yellow: #ffd633;
+    --expos-red: #ff3b4e;
+    --expos-green: #10b941;
+    --expos-orange: #f47721;
+    --expos-purple: #9b43e8;
+
+    --expos-bg: #f6f8fc;
+    --expos-card: #ffffff;
+    --expos-text: #071846;
+    --expos-muted: #6f7890;
+    --expos-border: #edf0f6;
+
+    --expos-radius-sm: 12px;
+    --expos-radius-md: 16px;
+    --expos-radius-lg: 24px;
+
+    --expos-shadow-card: 0 12px 28px rgba(7, 24, 70, .08);
+    --expos-shadow-strong: 0 16px 32px rgba(7, 40, 102, .18);
+
+    --expos-font-family: Arial, sans-serif;
+    --expos-font-body: 16px;
+    --expos-font-small: 12px;
+    --expos-font-title: 22px;
+    --expos-font-hero: 40px;
+
+    --expos-button-height: 52px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--expos-bg);
+    color: var(--expos-text);
+    font-family: var(--expos-font-family);
+    font-size: var(--expos-font-body);
+  }
+
+  .expos-app {
+    width: 100%;
+    max-width: var(--expos-width-max);
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--expos-bg);
+    overflow-x: hidden;
+  }
+
+  .expos-section {
+    padding: var(--expos-space-2);
+  }
+
+  .expos-card {
+    background: var(--expos-card);
+    border-radius: var(--expos-radius-md);
+    padding: var(--expos-space-2);
+    box-shadow: var(--expos-shadow-card);
+  }
+
+  .expos-card-lg {
+    border-radius: var(--expos-radius-lg);
+    padding: var(--expos-space-3) var(--expos-space-2);
+  }
+
+  .expos-button {
+    width: 100%;
+    height: var(--expos-button-height);
+    border: 0;
+    border-radius: var(--expos-radius-md);
+    background: var(--expos-blue);
+    color: white;
+    font-size: var(--expos-font-body);
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .expos-button-secondary {
+    background: #e9f1ff;
+    color: var(--expos-blue);
+  }
+
+  .expos-input,
+  .expos-select,
+  .expos-textarea {
+    width: 100%;
+    min-height: var(--expos-button-height);
+    border: 1px solid var(--expos-border);
+    border-radius: var(--expos-radius-md);
+    background: white;
+    color: var(--expos-text);
+    padding: 0 var(--expos-space-2);
+    font-size: var(--expos-font-body);
+    font-family: var(--expos-font-family);
+  }
+
+  .expos-textarea {
+    min-height: 120px;
+    padding-top: var(--expos-space-2);
+    resize: vertical;
+  }
+
+  .expos-label {
+    display: block;
+    margin-bottom: var(--expos-space-1);
+    color: var(--expos-text);
+    font-weight: 800;
+    font-size: 14px;
+  }
+
+  .expos-title {
+    font-size: var(--expos-font-title);
+    font-weight: 900;
+    margin: 0;
+  }
+
+  .expos-muted {
+    color: var(--expos-muted);
+  }
+
+  .expos-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--expos-space-2);
+  }
+
+  .expos-stack {
+    display: grid;
+    gap: var(--expos-space-2);
+  }
+
+  .expos-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    padding: 0 var(--expos-space-1);
+    border-radius: 999px;
+    background: #e9f1ff;
+    color: var(--expos-blue);
+    font-size: var(--expos-font-small);
+    font-weight: 900;
+  }
+
+  .expos-snackbar {
+    position: fixed;
+    left: 50%;
+    bottom: var(--expos-space-3);
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: calc(var(--expos-width-max) - 32px);
+    border-radius: var(--expos-radius-md);
+    padding: var(--expos-space-2);
+    background: var(--expos-text);
+    color: white;
+    box-shadow: var(--expos-shadow-strong);
+    font-weight: 800;
+  }
+
+  .expos-loading {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #d9e2f2;
+    border-top-color: var(--expos-blue);
+    border-radius: 50%;
+    animation: expos-spin .8s linear infinite;
+  }
+
+  @keyframes expos-spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
