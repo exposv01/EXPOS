@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EXPOS - Permission</title>
+  <style>
+    body{margin:0;background:#f4f7fb;font-family:Arial,sans-serif;color:#172033}.app{max-width:390px;margin:0 auto;min-height:100vh}.top{background:#0f3d73;color:#fff;padding:28px 16px 38px;border-bottom-left-radius:28px;border-bottom-right-radius:28px;display:flex;gap:12px}.back{width:40px;height:40px;border:0;border-radius:14px;background:rgba(255,255,255,.15);color:#fff;font-size:22px}.top h1{margin:0;font-size:21px}.top p{margin:4px 0 0;font-size:12px;opacity:.82}.card{margin:-24px 14px 14px;background:#fff;border:1px solid #e5eaf2;border-radius:22px;padding:14px;box-shadow:0 12px 30px rgba(15,61,115,.08)}label{display:block;margin:12px 0 6px;font-size:12px;font-weight:700}input,select,textarea{width:100%;box-sizing:border-box;border:1px solid #e5eaf2;border-radius:14px;padding:12px;font-size:14px}textarea{min-height:92px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:calc(100% - 28px);max-width:362px;min-height:52px;border:0;border-radius:18px;background:#145aa0;color:#fff;font-weight:900}.toast{position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#172033;color:#fff;padding:12px;border-radius:16px;display:none;width:calc(100% - 42px);max-width:348px;font-size:13px}.toast.on{display:block}@media(max-width:340px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top"><button class="back" onclick="go('home')">‹</button><div><h1>Pengajuan Izin</h1><p>Form mobile EXPOS</p></div></header>
+    <section class="card">
+      <form id="form">
+        <label>Cabang</label><select name="branch"><option value="">Pilih</option><option>CBN</option><option>ARH</option><option>SLW</option></select>
+        <label>Nama Karyawan</label><input name="employeeName" placeholder="Sesuai Master Karyawan">
+        <div class="row"><div><label>Mulai</label><input name="startDate" id="start" type="date"></div><div><label>Selesai</label><input name="endDate" id="end" type="date"></div></div>
+        <label>Alasan</label><textarea name="reason"></textarea>
+      </form>
+    </section>
+    <button id="btn" class="btn" onclick="send()">Kirim Pengajuan</button>
+  </main>
+  <div id="toast" class="toast"></div>
+<script>
+function go(p){location.href=location.href.split('?')[0]+'?page='+encodeURIComponent(p)}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(function(){t.classList.remove('on')},2600)}
+function diff(a,b){if(!a||!b)return 0;var s=new Date(a+'T00:00:00'),e=new Date(b+'T00:00:00');if(e<s)return 0;return Math.round((e-s)/86400000)+1}
+function val(){var d=new FormData(document.getElementById('form')),a=d.get('startDate')||'',b=d.get('endDate')||'';return{branch:(d.get('branch')||'').trim(),employeeName:(d.get('employeeName')||'').trim(),startDate:a,endDate:b,durationDays:diff(a,b),reason:(d.get('reason')||'').trim(),clientTimestamp:new Date().toISOString()}}
+function send(){var p=val();if(!p.branch)return toast('Cabang wajib dipilih.');if(!p.employeeName)return toast('Nama wajib diisi.');if(!p.durationDays)return toast('Tanggal tidak valid.');if(!p.reason)return toast('Alasan wajib diisi.');btn.disabled=true;btn.textContent='Mengirim...';google.script.run.withSuccessHandler(function(){btn.disabled=false;btn.textContent='Kirim Pengajuan';document.getElementById('form').reset();init();toast('Berhasil dikirim.')}).withFailureHandler(function(e){btn.disabled=false;btn.textContent='Kirim Pengajuan';toast(e&&e.message?e.message:'Gagal dikirim.')}).submitIzinFromUi(p)}
+function init(){var t=new Date().toISOString().slice(0,10);start.value=t;end.value=t}document.addEventListener('DOMContentLoaded',init)
+</script>
+</body>
+</html>
