@@ -1,19 +1,9 @@
-/**
- * EXPOS WebApp Router
- * Sprint 5 Foundation
- *
- * Bible EXPOS:
- * - UI is presentation layer only.
- * - WebApp routes page rendering only.
- * - Workflow must go through Controller -> Service -> Repository.
- */
-
 const EXPOS_UI_ROUTES = Object.freeze({
-  home: 'gas/ui/UI-007_HomeDashboard',
-  reportProblem: 'gas/ui/UI-008_ReportProblemForm',
+  home: 'gas/ui/s5/UI-007_HomeDashboard_S5',
+  reportProblem: 'gas/ui/s5/UI-008_ReportProblemForm_S5',
   absensi: 'gas/ui/UI-009_AbsensiForm',
-  kasbon: 'gas/ui/UI-010_KasbonForm',
-  izin: 'gas/ui/UI-011_IzinForm',
+  kasbon: 'gas/ui/s5/UI-010_KasbonForm_S5',
+  izin: 'gas/ui/s5/UI-011_PermissionForm_S5',
   rekapAbsensi: 'gas/ui/UI-012_RekapAbsensi'
 });
 
