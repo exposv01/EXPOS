@@ -5,7 +5,7 @@
  * Coordinates future UI requests and routes them to the appropriate services.
  *
  * Current scope:
- * Exposes Master Cabang, Master Karyawan, Absensi, and Izin helpers for UI usage.
+ * Exposes Master Cabang, Master Karyawan, Absensi, Izin, and Kasbon helpers for UI usage.
  */
 
 /**
@@ -90,4 +90,25 @@ function createIzin(data) {
  */
 function getRekapIzin() {
   return getIzinRecords();
+}
+
+/**
+ * Initializes Kasbon from a manual Apps Script run or future admin flow.
+ */
+function initializeKasbon() {
+  return setupKasbon();
+}
+
+/**
+ * Submits a Kasbon record from UI or manual Apps Script test.
+ */
+function createKasbon(data) {
+  return submitKasbon(data);
+}
+
+/**
+ * Returns all Kasbon records.
+ */
+function getRekapKasbon() {
+  return getKasbonRecords();
 }
