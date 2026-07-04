@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <style>
+    :root {
+      --expos-navy: #072866;
+      --expos-blue: #0b4fd6;
+      --expos-text: #071846;
+      --expos-muted: #6f7890;
+      --expos-bg: #f6f8fc;
+      --expos-card: #ffffff;
+      --expos-radius: 16px;
+      --expos-padding: 16px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--expos-bg);
+      color: var(--expos-text);
+      font-family: Arial, sans-serif;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--expos-bg);
+      overflow-x: hidden;
+    }
+
+    .hero {
+      background: var(--expos-navy);
+      color: white;
+      padding: 32px 16px 24px;
+      text-align: center;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 28px;
+    }
+
+    .logo-title {
+      font-size: 40px;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .logo-subtitle {
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .notification {
+      position: relative;
+      font-size: 28px;
+    }
+
+    .badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff3b4e;
+      color: white;
+      font-size: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .greeting-card {
+      margin-top: 20px;
+      background: white;
+      color: var(--expos-text);
+      border-radius: 24px;
+      padding: 20px 16px;
+      display: grid;
+      grid-template-columns: 48px 1fr 96px;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .sun { font-size: 36px; }
+    .greeting-title { font-size: 24px; font-weight: 800; margin: 0 0 8px; }
+    .greeting-message { font-size: 14px; font-weight: 700; margin: 0 0 6px; }
+    .date { font-size: 13px; color: var(--expos-muted); font-weight: 700; }
+    .time-box { border-left: 1px solid #e2e6ef; text-align: center; }
+    .time { font-size: 34px; color: var(--expos-blue); font-weight: 800; }
+    .timezone { display: inline-block; margin-top: 4px; padding: 4px 12px; border-radius: 20px; background: #e9f1ff; color: var(--expos-blue); font-size: 12px; font-weight: 800; }
+
+    .happy-card {
+      margin: -8px 16px 24px;
+      background: linear-gradient(135deg, #0d5ce8, #06256a);
+      color: white;
+      border-radius: 18px;
+      padding: 20px 12px;
+      box-shadow: 0 16px 32px rgba(7, 40, 102, .18);
+    }
+
+    .happy-title { text-align: center; font-size: 20px; font-weight: 800; margin-bottom: 16px; }
+    .happy-title span { color: #ffd633; }
+
+    .happy-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      text-align: center;
+    }
+
+    .happy-item { padding: 0 6px; border-right: 1px solid rgba(255,255,255,.24); }
+    .happy-item:last-child { border-right: none; }
+    .happy-letter { font-size: 30px; font-weight: 900; margin-bottom: 8px; }
+    .happy-name { font-size: 10px; font-weight: 800; min-height: 24px; }
+    .happy-desc { margin-top: 6px; font-size: 10px; line-height: 1.35; }
+
+    .content { padding: 0 16px 24px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin: 0 0 12px; }
+    .section-title { font-size: 22px; font-weight: 900; }
+    .section-link { color: var(--expos-blue); font-weight: 800; font-size: 14px; }
+
+    .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+    .menu-card {
+      min-height: 142px;
+      background: var(--expos-card);
+      border-radius: var(--expos-radius);
+      padding: var(--expos-padding);
+      box-shadow: 0 12px 28px rgba(7, 24, 70, .08);
+      position: relative;
+    }
+
+    .menu-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .pink { background: #ffe8ef; }
+    .green { background: #e7f7ec; }
+    .orange { background: #fff2dc; }
+    .blue { background: #eef4ff; }
+    .purple { background: #f1e7ff; }
+
+    .menu-title { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+    .menu-desc { color: var(--expos-text); font-size: 14px; line-height: 1.35; }
+    .arrow { position: absolute; right: 14px; bottom: 14px; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; }
+
+    .new-badge { display: inline-block; margin-left: 6px; padding: 3px 7px; border-radius: 10px; background: #ead7ff; color: #9b43e8; font-size: 10px; font-weight: 900; vertical-align: middle; }
+
+    .summary-header { margin-top: 24px; }
+    .summary-card { background: var(--expos-card); border-radius: var(--expos-radius); padding: 12px; box-shadow: 0 12px 28px rgba(7, 24, 70, .08); }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 12px 6px; border-bottom: 1px solid #edf0f6; text-align: center; font-weight: 800; }
+    th:first-child, td:first-child { text-align: left; }
+    tr:last-child td { border-bottom: none; }
+    .cabang-a { color: #0b64db; }
+    .cabang-b { color: #1ba848; }
+    .cabang-c { color: #f47721; }
+
+    .whatsapp {
+      margin-top: 24px;
+      background: #10b941;
+      color: white;
+      border-radius: var(--expos-radius);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 16px 32px rgba(16, 185, 65, .25);
+    }
+    .whatsapp-icon { font-size: 32px; }
+    .whatsapp-title { font-size: 18px; font-weight: 900; }
+    .whatsapp-desc { margin-top: 4px; font-size: 13px; }
+
+    .footer { padding: 20px 16px 28px; color: var(--expos-muted); font-size: 12px; text-align: center; }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="topbar">
+        <div>☰</div>
+        <div>
+          <div class="logo-title">EXPOS</div>
+          <div class="logo-subtitle">Software Internal EXP Gaming</div>
+        </div>
+        <div class="notification">♡<span class="badge">3</span></div>
+      </div>
+
+      <div class="greeting-card">
+        <div class="sun">☀️</div>
+        <div>
+          <h1 class="greeting-title">Selamat malam!</h1>
+          <p class="greeting-message">Jangan lupa bahagia hari ini 😊</p>
+          <div class="date">Kamis, 2 Juli 2026</div>
+        </div>
+        <div class="time-box">
+          <div class="time">18:31</div>
+          <div class="timezone">WIB</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="happy-card">
+      <div class="happy-title">Budaya Kerja <span>HAPPY</span> setiap saat</div>
+      <div class="happy-grid">
+        <div class="happy-item"><div class="happy-letter">H</div><div class="happy-name">Happy Inside</div><div class="happy-desc">Bahagia dari dalam diri</div></div>
+        <div class="happy-item"><div class="happy-letter">A</div><div class="happy-name">Always Improve</div><div class="happy-desc">Selalu ingin menjadi lebih baik</div></div>
+        <div class="happy-item"><div class="happy-letter">P</div><div class="happy-name">Positive Attitude</div><div class="happy-desc">Sikap positif setiap saat</div></div>
+        <div class="happy-item"><div class="happy-letter">P</div><div class="happy-name">Play as One Team</div><div class="happy-desc">Bermain sebagai satu tim</div></div>
+        <div class="happy-item"><div class="happy-letter">Y</div><div class="happy-name">Yes We Can</div><div class="happy-desc">Yakin, berani, dan bisa!</div></div>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="section-header">
+        <div class="section-title">Menu Utama</div>
+        <div class="section-link">Lihat Semua ›</div>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card"><div class="menu-icon pink">⚠️</div><div class="menu-title">Report Problem</div><div class="menu-desc">Laporkan masalah yang terjadi</div><div class="arrow pink">›</div></div>
+        <div class="menu-card"><div class="menu-icon green">✅</div><div class="menu-title">Absensi</div><div class="menu-desc">Catat kehadiran harian</div><div class="arrow green">›</div></div>
+        <div class="menu-card"><div class="menu-icon orange">💳</div><div class="menu-title">Kasbon</div><div class="menu-desc">Ajukan kasbon dengan mudah</div><div class="arrow orange">›</div></div>
+        <div class="menu-card"><div class="menu-icon blue">📄</div><div class="menu-title">Pengajuan Izin</div><div class="menu-desc">Ajukan izin dengan cepat & praktis</div><div class="arrow blue">›</div></div>
+        <div class="menu-card"><div class="menu-icon purple">📅</div><div class="menu-title">Rekap Absensi <span class="new-badge">NEW</span></div><div class="menu-desc">Lihat ringkasan kehadiran karyawan</div><div class="arrow purple">›</div></div>
+      </div>
+
+      <div class="section-header summary-header">
+        <div class="section-title">📊 Ringkasan Absensi Hari Ini</div>
+        <div class="date">Update: 18:31 WIB ↻</div>
+      </div>
+
+      <div class="summary-card">
+        <table>
+          <thead><tr><th>KETERANGAN</th><th class="cabang-a">CABANG A</th><th class="cabang-b">CABANG B</th><th class="cabang-c">CABANG C</th></tr></thead>
+          <tbody>
+            <tr><td>✅ Hadir Shift 1</td><td class="cabang-a">0</td><td class="cabang-b">0</td><td class="cabang-c">0</td></tr>
+            <tr><td>🔵 Hadir Shift 2</td><td class="cabang-a">0</td><td class="cabang-b">0</td><td class="cabang-c">0</td></tr>
+            <tr><td>❌ Tidak Hadir</td><td class="cabang-a">0</td><td class="cabang-b">0</td><td class="cabang-c">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="whatsapp">
+        <div class="whatsapp-icon">☏</div>
+        <div><div class="whatsapp-title">Whatsapp kalo Emergency</div><div class="whatsapp-desc">Klik untuk menghubungi via WhatsApp</div></div>
+      </div>
+    </section>
+
+    <footer class="footer">♡ Developed by Samuel &nbsp; | &nbsp; © 2026 EXP Gaming &nbsp; | &nbsp; Version v0.1.0 Trial</footer>
+  </main>
+</body>
+</html>
