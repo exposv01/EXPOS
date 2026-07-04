@@ -1,0 +1,90 @@
+<section class="expos-section" data-expos-page="kasbon" hidden>
+  <div class="expos-stack">
+    <div class="expos-card expos-card-lg">
+      <button class="expos-button expos-button-secondary" type="button" data-expos-back>← Kembali</button>
+      <h1 class="expos-title" style="margin-top:16px;">Kasbon</h1>
+      <p class="expos-muted" style="margin-bottom:0;">Ajukan kasbon karyawan dengan cepat dan tercatat rapi.</p>
+    </div>
+
+    <form class="expos-card expos-stack" id="kasbonForm">
+      <div>
+        <label class="expos-label" for="kasbonCabang">Cabang</label>
+        <select class="expos-select" id="kasbonCabang" name="cabang" required>
+          <option value="">Pilih cabang</option>
+          <option value="CBN">EXP Gaming Cibinong</option>
+          <option value="ARH">EXP Gaming Ar Hakim</option>
+          <option value="SLW">EXP Gaming Siliwangi</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="expos-label" for="kasbonKaryawan">ID Karyawan</label>
+        <input class="expos-input" id="kasbonKaryawan" name="idKaryawan" placeholder="Contoh: CBN-001" required>
+      </div>
+
+      <div>
+        <label class="expos-label" for="kasbonNominal">Nominal Kasbon</label>
+        <input class="expos-input" id="kasbonNominal" name="nominal" type="number" min="1" placeholder="Contoh: 100000" required>
+      </div>
+
+      <div>
+        <label class="expos-label" for="kasbonKeterangan">Keterangan</label>
+        <textarea class="expos-textarea" id="kasbonKeterangan" name="keterangan" placeholder="Contoh: Kasbon transport / kebutuhan mendesak"></textarea>
+      </div>
+
+      <button class="expos-button" type="submit" id="kasbonSubmitButton">Kirim Kasbon</button>
+    </form>
+  </div>
+</section>
+
+<script>
+  function exposShowKasbonSnackbar(message) {
+    var snackbar = document.createElement('div');
+    snackbar.className = 'expos-snackbar';
+    snackbar.textContent = message;
+    document.body.appendChild(snackbar);
+
+    setTimeout(function() {
+      snackbar.remove();
+    }, 2400);
+  }
+
+  function exposBindKasbonForm() {
+    var form = document.getElementById('kasbonForm');
+    var button = document.getElementById('kasbonSubmitButton');
+
+    if (!form || !button) {
+      return;
+    }
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var payload = {
+        cabang: form.cabang.value,
+        idKaryawan: form.idKaryawan.value,
+        nominal: form.nominal.value,
+        keterangan: form.keterangan.value
+      };
+
+      button.disabled = true;
+      button.textContent = 'Mengirim...';
+
+      google.script.run
+        .withSuccessHandler(function() {
+          form.reset();
+          button.disabled = false;
+          button.textContent = 'Kirim Kasbon';
+          exposShowKasbonSnackbar('Kasbon berhasil dikirim ✅');
+        })
+        .withFailureHandler(function(error) {
+          button.disabled = false;
+          button.textContent = 'Kirim Kasbon';
+          exposShowKasbonSnackbar(error.message || 'Kasbon gagal dikirim');
+        })
+        .createKasbon(payload);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', exposBindKasbonForm);
+</script>
