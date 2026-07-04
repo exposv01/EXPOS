@@ -1,10 +1,10 @@
 const EXPOS_UI_ROUTES = Object.freeze({
   home: 'gas/ui/s5/UI-007_HomeDashboard_S5',
   reportProblem: 'gas/ui/s5/UI-008_ReportProblemForm_S5',
-  absensi: 'gas/ui/UI-009_AbsensiForm',
+  absensi: 'gas/ui/s5/UI-009_AbsensiForm_S5',
   kasbon: 'gas/ui/s5/UI-010_KasbonForm_S5',
   izin: 'gas/ui/s5/UI-011_PermissionForm_S5',
-  rekapAbsensi: 'gas/ui/UI-012_RekapAbsensi'
+  rekapAbsensi: 'gas/ui/s5/UI-012_RekapAbsensi_S5'
 });
 
 function doGet(e) {
