@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EXPOS - Rekap Absensi</title>
+  <style>
+    :root {
+      --expos-blue: #0f3d73;
+      --expos-blue-2: #145aa0;
+      --expos-bg: #f4f7fb;
+      --expos-card: #ffffff;
+      --expos-text: #172033;
+      --expos-muted: #667085;
+      --expos-border: #e5eaf2;
+      --expos-purple: #7c3aed;
+      --expos-green: #16a34a;
+      --expos-orange: #f97316;
+      --expos-red: #ef4444;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-card: 0 12px 30px rgba(15, 61, 115, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--expos-bg);
+      color: var(--expos-text);
+    }
+
+    button, input, select { font: inherit; }
+
+    .app-shell {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--expos-bg);
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px 20px;
+      background: linear-gradient(160deg, var(--expos-blue), #092947);
+      color: #fff;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+
+    .topbar-row { display: flex; align-items: center; gap: 12px; }
+
+    .back-button {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .title-block h1 { margin: 0; font-size: 21px; line-height: 1.15; }
+    .title-block p { margin: 4px 0 0; font-size: 12px; opacity: 0.82; line-height: 1.3; }
+
+    .content { padding: 16px 14px 28px; }
+
+    .summary-card, .filter-card, .list-card {
+      border-radius: var(--radius-lg);
+      background: var(--expos-card);
+      border: 1px solid var(--expos-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .summary-card {
+      margin-top: -28px;
+      padding: 14px;
+    }
+
+    .summary-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin-bottom: 14px;
+    }
+
+    .summary-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: #ede9fe;
+      color: var(--expos-purple);
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      flex: 0 0 auto;
+    }
+
+    .summary-card h2 { margin: 0; font-size: 15px; line-height: 1.25; }
+    .summary-card p { margin: 5px 0 0; color: var(--expos-muted); font-size: 12px; line-height: 1.4; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .metric {
+      padding: 10px 6px;
+      border-radius: var(--radius-md);
+      background: #f7faff;
+      text-align: center;
+    }
+
+    .metric strong { display: block; font-size: 20px; line-height: 1; color: var(--expos-blue); }
+    .metric span { display: block; margin-top: 6px; font-size: 10px; color: var(--expos-muted); font-weight: 800; }
+
+    .filter-card { margin-top: 14px; padding: 14px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .field { margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    input, select {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid var(--expos-border);
+      border-radius: 15px;
+      background: #fbfdff;
+      color: var(--expos-text);
+      padding: 11px;
+      outline: none;
+    }
+
+    input:focus, select:focus, button:focus-visible {
+      border-color: rgba(20, 90, 160, 0.7);
+      box-shadow: 0 0 0 3px rgba(20, 90, 160, 0.14);
+    }
+
+    .filter-button {
+      width: 100%;
+      min-height: 46px;
+      border: 0;
+      border-radius: 16px;
+      background: var(--expos-purple);
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 2px 10px;
+      gap: 10px;
+    }
+
+    .section-header h3 { margin: 0; font-size: 16px; }
+    .section-header span { color: var(--expos-muted); font-size: 11px; font-weight: 800; }
+
+    .list-card { padding: 8px; }
+
+    .attendance-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 11px 8px;
+      border-bottom: 1px solid var(--expos-border);
+    }
+
+    .attendance-item:last-child { border-bottom: 0; }
+
+    .employee-name {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.25;
+      font-weight: 900;
+    }
+
+    .attendance-meta {
+      margin: 4px 0 0;
+      color: var(--expos-muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .status-pill {
+      align-self: start;
+      padding: 6px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .status-hadir { background: #ecfdf3; color: #166534; }
+    .status-izin { background: #eef6ff; color: var(--expos-blue-2); }
+    .status-telat { background: #fff7ed; color: #9a3412; }
+    .status-alpha { background: #fff1f2; color: #991b1b; }
+
+    .empty-state {
+      padding: 24px 14px;
+      text-align: center;
+      color: var(--expos-muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(120px);
+      width: min(358px, calc(100% - 28px));
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #172033;
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(23, 32, 51, 0.24);
+      font-size: 13px;
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transition: 220ms ease;
+      z-index: 10;
+    }
+
+    .toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 340px) {
+      .two-col, .metric-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" aria-label="Rekap Absensi EXPOS">
+    <header class="topbar">
+      <div class="topbar-row">
+        <button class="back-button" type="button" aria-label="Kembali" onclick="goBack()">‹</button>
+        <div class="title-block">
+          <h1>Rekap Absensi</h1>
+          <p>Lihat ringkasan kehadiran karyawan cabang.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <article class="summary-card">
+        <div class="summary-top">
+          <div class="summary-icon" aria-hidden="true">📅</div>
+          <div>
+            <h2>Ringkasan Periode</h2>
+            <p id="summaryLabel">Memuat data rekap absensi...</p>
+          </div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><strong id="metricHadir">0</strong><span>Hadir</span></div>
+          <div class="metric"><strong id="metricIzin">0</strong><span>Izin</span></div>
+          <div class="metric"><strong id="metricProblem">0</strong><span>Telat/Alpha</span></div>
+        </div>
+      </article>
+
+      <form id="filterForm" class="filter-card" novalidate>
+        <div class="two-col">
+          <div class="field">
+            <label for="branch">Cabang</label>
+            <select id="branch" name="branch">
+              <option value="ALL">Semua</option>
+              <option value="CBN">CBN</option>
+              <option value="ARH">ARH</option>
+              <option value="SLW">SLW</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="period">Periode</label>
+            <input id="period" name="period" type="month">
+          </div>
+        </div>
+        <button class="filter-button" type="button" onclick="loadRecap()">Tampilkan Rekap</button>
+      </form>
+
+      <div class="section-header">
+        <h3>Detail Absensi</h3>
+        <span id="updateText">Update: --:-- WIB</span>
+      </div>
+
+      <article class="list-card" id="attendanceList">
+        <div class="empty-state">Data belum dimuat.</div>
+      </article>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const SAMPLE_RECAP = {
+      summary: { hadir: 0, izin: 0, telatAlpha: 0 },
+      items: []
+    };
+
+    function initRekapAbsensi() {
+      document.getElementById('period').value = new Date().toISOString().slice(0, 7);
+      loadRecap();
+    }
+
+    function collectFilter() {
+      const form = document.getElementById('filterForm');
+      const data = new FormData(form);
+      return {
+        branch: String(data.get('branch') || 'ALL'),
+        period: String(data.get('period') || '').trim(),
+        clientTimestamp: new Date().toISOString()
+      };
+    }
+
+    function loadRecap() {
+      const filter = collectFilter();
+      if (!filter.period) {
+        showToast('Periode wajib dipilih.');
+        return;
+      }
+
+      if (window.google && google.script && google.script.run && typeof google.script.run.getAttendanceRecap === 'function') {
+        google.script.run
+          .withSuccessHandler(function (data) { renderRecap(data || SAMPLE_RECAP, filter); })
+          .withFailureHandler(function () { showToast('Rekap belum berhasil dimuat.'); })
+          .getAttendanceRecap(filter);
+        return;
+      }
+
+      renderRecap(SAMPLE_RECAP, filter);
+      showToast('UI-012 siap. Controller getAttendanceRecap belum disambungkan.');
+    }
+
+    function renderRecap(data, filter) {
+      const summary = data.summary || {};
+      const items = Array.isArray(data.items) ? data.items : [];
+      document.getElementById('metricHadir').textContent = safeNumber(summary.hadir);
+      document.getElementById('metricIzin').textContent = safeNumber(summary.izin);
+      document.getElementById('metricProblem').textContent = safeNumber(summary.telatAlpha);
+      document.getElementById('summaryLabel').textContent = 'Cabang ' + (filter.branch === 'ALL' ? 'semua' : filter.branch) + ' • Periode ' + filter.period;
+      document.getElementById('updateText').textContent = 'Update: ' + new Intl.DateTimeFormat('id-ID', {
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Jakarta'
+      }).format(new Date()) + ' WIB';
+
+      const list = document.getElementById('attendanceList');
+      if (!items.length) {
+        list.innerHTML = '<div class="empty-state">Belum ada data rekap untuk filter ini. Data asli akan muncul setelah Controller tersambung ke service/repository.</div>';
+        return;
+      }
+
+      list.innerHTML = items.map(function (item) {
+        const status = String(item.status || 'Hadir');
+        return '<div class="attendance-item">'
+          + '<div>'
+          + '<p class="employee-name">' + escapeHtml(item.employeeName || '-') + '</p>'
+          + '<p class="attendance-meta">' + escapeHtml(item.branch || '-') + ' • ' + escapeHtml(item.date || '-') + ' • ' + escapeHtml(item.shift || '-') + '</p>'
+          + '<p class="attendance-meta">Masuk: ' + escapeHtml(item.checkIn || '-') + ' • Pulang: ' + escapeHtml(item.checkOut || '-') + '</p>'
+          + '</div>'
+          + '<span class="status-pill ' + getStatusClass(status) + '">' + escapeHtml(status) + '</span>'
+          + '</div>';
+      }).join('');
+    }
+
+    function getStatusClass(status) {
+      const normalized = String(status).toLowerCase();
+      if (normalized.includes('izin')) return 'status-izin';
+      if (normalized.includes('telat')) return 'status-telat';
+      if (normalized.includes('alpha')) return 'status-alpha';
+      return 'status-hadir';
+    }
+
+    function safeNumber(value) {
+      const numberValue = Number(value || 0);
+      return Number.isFinite(numberValue) ? numberValue : 0;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function goBack() {
+      if (window.google && google.script && google.script.run && typeof google.script.run.openExposModule === 'function') {
+        google.script.run.openExposModule('home');
+        return;
+      }
+      showToast('Kembali ke Home Dashboard saat router disambungkan.');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      window.clearTimeout(showToast.timeoutId);
+      showToast.timeoutId = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 2600);
+    }
+
+    document.addEventListener('DOMContentLoaded', initRekapAbsensi);
+  </script>
+</body>
+</html>
