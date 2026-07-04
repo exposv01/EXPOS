@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EXPOS - Kasbon</title>
+  <style>
+    :root {
+      --expos-blue: #0f3d73;
+      --expos-bg: #f4f7fb;
+      --expos-card: #ffffff;
+      --expos-text: #172033;
+      --expos-muted: #667085;
+      --expos-border: #e5eaf2;
+      --expos-orange: #f97316;
+      --expos-red: #ef4444;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-card: 0 12px 30px rgba(15, 61, 115, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--expos-bg);
+      color: var(--expos-text);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    .app-shell {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--expos-bg);
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px 20px;
+      background: linear-gradient(160deg, var(--expos-blue), #092947);
+      color: #fff;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+
+    .topbar-row { display: flex; align-items: center; gap: 12px; }
+
+    .back-button {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .title-block h1 { margin: 0; font-size: 21px; line-height: 1.15; }
+    .title-block p { margin: 4px 0 0; font-size: 12px; opacity: 0.82; line-height: 1.3; }
+
+    .content { padding: 16px 14px 28px; }
+
+    .info-card, .form-card {
+      border-radius: var(--radius-lg);
+      background: var(--expos-card);
+      border: 1px solid var(--expos-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .info-card {
+      margin-top: -28px;
+      padding: 14px;
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+    }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: #ffedd5;
+      color: var(--expos-orange);
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      flex: 0 0 auto;
+    }
+
+    .info-card h2 { margin: 0; font-size: 15px; line-height: 1.25; }
+    .info-card p { margin: 5px 0 0; color: var(--expos-muted); font-size: 12px; line-height: 1.4; }
+
+    .form-card { margin-top: 14px; padding: 14px; }
+
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .required { color: var(--expos-red); }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--expos-border);
+      border-radius: 15px;
+      background: #fbfdff;
+      color: var(--expos-text);
+      padding: 12px;
+      outline: none;
+    }
+
+    textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+
+    input:focus, select:focus, textarea:focus, button:focus-visible {
+      border-color: rgba(20, 90, 160, 0.7);
+      box-shadow: 0 0 0 3px rgba(20, 90, 160, 0.14);
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .amount-preview {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 15px;
+      background: #fff7ed;
+      color: #9a3412;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .note-box {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 15px;
+      background: #eef6ff;
+      color: var(--expos-blue);
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .action-row {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px);
+      background: linear-gradient(180deg, rgba(244,247,251,0), var(--expos-bg) 28%);
+      max-width: 390px;
+      margin: 0 auto;
+    }
+
+    .submit-button {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      background: var(--expos-orange);
+      color: #fff;
+      min-height: 52px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 14px 26px rgba(249, 115, 22, 0.22);
+    }
+
+    .submit-button:disabled { opacity: 0.62; cursor: not-allowed; }
+
+    .helper-text {
+      margin: 8px 0 0;
+      color: var(--expos-muted);
+      font-size: 10px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(120px);
+      width: min(358px, calc(100% - 28px));
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #172033;
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(23, 32, 51, 0.24);
+      font-size: 13px;
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transition: 220ms ease;
+      z-index: 10;
+    }
+
+    .toast.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 340px) { .two-col { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main class="app-shell" aria-label="Form Kasbon EXPOS">
+    <header class="topbar">
+      <div class="topbar-row">
+        <button class="back-button" type="button" aria-label="Kembali" onclick="goBack()">‹</button>
+        <div class="title-block">
+          <h1>Kasbon</h1>
+          <p>Ajukan kasbon karyawan secara mobile dan tercatat.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <article class="info-card">
+        <div class="info-icon" aria-hidden="true">💳</div>
+        <div>
+          <h2>Pengajuan kasbon</h2>
+          <p>Isi nominal dan alasan dengan jelas. Approval dan pencairan bukan bagian dari UI-010.</p>
+        </div>
+      </article>
+
+      <form id="kasbonForm" class="form-card" novalidate>
+        <div class="two-col">
+          <div class="field">
+            <label for="branch">Cabang <span class="required">*</span></label>
+            <select id="branch" name="branch" required>
+              <option value="">Pilih cabang</option>
+              <option value="CBN">CBN</option>
+              <option value="ARH">ARH</option>
+              <option value="SLW">SLW</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="requestDate">Tanggal <span class="required">*</span></label>
+            <input id="requestDate" name="requestDate" type="date" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="employeeName">Nama Karyawan <span class="required">*</span></label>
+          <input id="employeeName" name="employeeName" type="text" maxlength="70" placeholder="Nama karyawan" required>
+        </div>
+
+        <div class="field">
+          <label for="amount">Nominal Kasbon <span class="required">*</span></label>
+          <input id="amount" name="amount" type="text" inputmode="numeric" placeholder="Contoh: 250000" required oninput="renderAmountPreview()">
+          <div id="amountPreview" class="amount-preview">Rp0</div>
+        </div>
+
+        <div class="field">
+          <label for="reason">Alasan Pengajuan <span class="required">*</span></label>
+          <textarea id="reason" name="reason" maxlength="500" placeholder="Jelaskan kebutuhan kasbon secara singkat dan jelas." required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="repaymentPlan">Rencana Pengembalian</label>
+          <select id="repaymentPlan" name="repaymentPlan">
+            <option value="">Pilih rencana</option>
+            <option value="Potong gaji bulan ini">Potong gaji bulan ini</option>
+            <option value="Potong gaji bulan depan">Potong gaji bulan depan</option>
+            <option value="Cicilan 2x">Cicilan 2x</option>
+            <option value="Cicilan 3x">Cicilan 3x</option>
+          </select>
+        </div>
+
+        <div class="note-box">
+          Identitas final, limit kasbon, dan validasi role tetap wajib diproses backend dari Google Session + Master_User.
+        </div>
+      </form>
+    </section>
+
+    <div class="action-row">
+      <button id="submitButton" class="submit-button" type="button" onclick="submitKasbon()">Kirim Pengajuan</button>
+      <p class="helper-text">UI-010 tidak membuat approval workflow dan tidak menulis Sheet langsung.</p>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    function initKasbonForm() {
+      document.getElementById('requestDate').value = new Date().toISOString().slice(0, 10);
+      renderAmountPreview();
+    }
+
+    function normalizeAmount(value) {
+      return Number(String(value || '').replace(/[^0-9]/g, '')) || 0;
+    }
+
+    function formatRupiah(value) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(value);
+    }
+
+    function renderAmountPreview() {
+      const amount = normalizeAmount(document.getElementById('amount').value);
+      document.getElementById('amountPreview').textContent = formatRupiah(amount);
+    }
+
+    function collectPayload() {
+      const form = document.getElementById('kasbonForm');
+      const data = new FormData(form);
+      return {
+        branch: String(data.get('branch') || '').trim(),
+        requestDate: String(data.get('requestDate') || '').trim(),
+        employeeName: String(data.get('employeeName') || '').trim(),
+        amount: normalizeAmount(data.get('amount')),
+        reason: String(data.get('reason') || '').trim(),
+        repaymentPlan: String(data.get('repaymentPlan') || '').trim(),
+        clientTimestamp: new Date().toISOString()
+      };
+    }
+
+    function validatePayload(payload) {
+      if (!payload.branch) return 'Cabang wajib dipilih.';
+      if (!payload.requestDate) return 'Tanggal wajib diisi.';
+      if (!payload.employeeName) return 'Nama karyawan wajib diisi.';
+      if (!payload.amount || payload.amount < 1000) return 'Nominal kasbon wajib diisi dengan benar.';
+      if (!payload.reason) return 'Alasan pengajuan wajib diisi.';
+      return '';
+    }
+
+    function submitKasbon() {
+      const payload = collectPayload();
+      const errorMessage = validatePayload(payload);
+      if (errorMessage) {
+        showToast(errorMessage);
+        return;
+      }
+
+      setSubmitting(true);
+
+      if (window.google && google.script && google.script.run && typeof google.script.run.submitKasbon === 'function') {
+        google.script.run
+          .withSuccessHandler(function () {
+            setSubmitting(false);
+            resetForm();
+            showToast('Pengajuan kasbon berhasil dikirim.');
+          })
+          .withFailureHandler(function () {
+            setSubmitting(false);
+            showToast('Pengajuan belum berhasil dikirim. Coba lagi.');
+          })
+          .submitKasbon(payload);
+        return;
+      }
+
+      window.setTimeout(function () {
+        setSubmitting(false);
+        showToast('UI-010 siap. Controller submitKasbon belum disambungkan.');
+      }, 500);
+    }
+
+    function setSubmitting(isSubmitting) {
+      const button = document.getElementById('submitButton');
+      button.disabled = isSubmitting;
+      button.textContent = isSubmitting ? 'Mengirim...' : 'Kirim Pengajuan';
+    }
+
+    function resetForm() {
+      document.getElementById('kasbonForm').reset();
+      initKasbonForm();
+    }
+
+    function goBack() {
+      if (window.google && google.script && google.script.run && typeof google.script.run.openExposModule === 'function') {
+        google.script.run.openExposModule('home');
+        return;
+      }
+      showToast('Kembali ke Home Dashboard saat router disambungkan.');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      window.clearTimeout(showToast.timeoutId);
+      showToast.timeoutId = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 2600);
+    }
+
+    document.addEventListener('DOMContentLoaded', initKasbonForm);
+  </script>
+</body>
+</html>
