@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EXPOS - Report Problem</title>
+  <style>
+    :root {
+      --expos-blue: #0f3d73;
+      --expos-blue-2: #145aa0;
+      --expos-bg: #f4f7fb;
+      --expos-card: #ffffff;
+      --expos-text: #172033;
+      --expos-muted: #667085;
+      --expos-border: #e5eaf2;
+      --expos-red: #ef4444;
+      --expos-orange: #f97316;
+      --expos-green: #16a34a;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-card: 0 12px 30px rgba(15, 61, 115, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--expos-bg);
+      color: var(--expos-text);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    .app-shell {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--expos-bg);
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px 20px;
+      background: linear-gradient(160deg, var(--expos-blue), #092947);
+      color: #fff;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .title-block { min-width: 0; }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.15;
+    }
+
+    .title-block p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      opacity: 0.82;
+      line-height: 1.3;
+    }
+
+    .content { padding: 16px 14px 28px; }
+
+    .info-card {
+      margin-top: -28px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: var(--expos-card);
+      border: 1px solid var(--expos-border);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+    }
+
+    .info-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      border-radius: 15px;
+      background: #fff1f2;
+      color: var(--expos-red);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+
+    .info-card h2 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .info-card p {
+      margin: 5px 0 0;
+      color: var(--expos-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .form-card {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: var(--expos-card);
+      border: 1px solid var(--expos-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .field { margin-bottom: 14px; }
+
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--expos-text);
+    }
+
+    .required { color: var(--expos-red); }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--expos-border);
+      border-radius: 15px;
+      background: #fbfdff;
+      color: var(--expos-text);
+      padding: 12px;
+      outline: none;
+      min-height: 46px;
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input:focus, select:focus, textarea:focus, button:focus-visible {
+      border-color: rgba(20, 90, 160, 0.7);
+      box-shadow: 0 0 0 3px rgba(20, 90, 160, 0.14);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .priority-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .priority-option input { display: none; }
+
+    .priority-pill {
+      display: block;
+      padding: 10px 6px;
+      border: 1px solid var(--expos-border);
+      border-radius: 14px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--expos-muted);
+      background: #fbfdff;
+      cursor: pointer;
+    }
+
+    .priority-option input:checked + .priority-pill.low {
+      color: #166534;
+      border-color: #86efac;
+      background: #ecfdf3;
+    }
+
+    .priority-option input:checked + .priority-pill.medium {
+      color: #9a3412;
+      border-color: #fdba74;
+      background: #fff7ed;
+    }
+
+    .priority-option input:checked + .priority-pill.high {
+      color: #991b1b;
+      border-color: #fca5a5;
+      background: #fff1f2;
+    }
+
+    .photo-box {
+      border: 1.5px dashed #c8d4e5;
+      border-radius: 16px;
+      padding: 13px;
+      background: #fbfdff;
+      text-align: center;
+    }
+
+    .photo-box p {
+      margin: 5px 0 0;
+      color: var(--expos-muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .photo-input {
+      padding: 10px;
+      min-height: auto;
+      background: transparent;
+      border: 0;
+    }
+
+    .action-row {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px);
+      background: linear-gradient(180deg, rgba(244,247,251,0), var(--expos-bg) 28%);
+      max-width: 390px;
+      margin: 0 auto;
+    }
+
+    .submit-button {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      background: var(--expos-blue);
+      color: #fff;
+      min-height: 52px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 14px 26px rgba(15, 61, 115, 0.22);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.62;
+      cursor: not-allowed;
+    }
+
+    .helper-text {
+      margin: 8px 0 0;
+      color: var(--expos-muted);
+      font-size: 10px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(120px);
+      width: min(358px, calc(100% - 28px));
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #172033;
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(23, 32, 51, 0.24);
+      font-size: 13px;
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transition: 220ms ease;
+      z-index: 10;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 340px) {
+      .two-col, .priority-group { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" aria-label="Form Report Problem EXPOS">
+    <header class="topbar">
+      <div class="topbar-row">
+        <button class="back-button" type="button" aria-label="Kembali" onclick="goBack()">‹</button>
+        <div class="title-block">
+          <h1>Report Problem</h1>
+          <p>Laporkan kendala operasional cabang secara cepat.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <article class="info-card">
+        <div class="info-icon" aria-hidden="true">⚠️</div>
+        <div>
+          <h2>Isi laporan dengan jelas</h2>
+          <p>Foto dan detail masalah akan membantu tim menyelesaikan kendala lebih cepat.</p>
+        </div>
+      </article>
+
+      <form id="reportProblemForm" class="form-card" novalidate>
+        <div class="two-col">
+          <div class="field">
+            <label for="branch">Cabang <span class="required">*</span></label>
+            <select id="branch" name="branch" required>
+              <option value="">Pilih cabang</option>
+              <option value="CBN">CBN</option>
+              <option value="ARH">ARH</option>
+              <option value="SLW">SLW</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="category">Kategori <span class="required">*</span></label>
+            <select id="category" name="category" required>
+              <option value="">Pilih kategori</option>
+              <option value="Konsol">Konsol</option>
+              <option value="TV / Monitor">TV / Monitor</option>
+              <option value="Controller">Controller</option>
+              <option value="Jaringan">Jaringan</option>
+              <option value="Fasilitas">Fasilitas</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="title">Judul Masalah <span class="required">*</span></label>
+          <input id="title" name="title" type="text" maxlength="90" placeholder="Contoh: Controller PS5 drifting" required>
+        </div>
+
+        <div class="field">
+          <label>Prioritas <span class="required">*</span></label>
+          <div class="priority-group" role="radiogroup" aria-label="Prioritas masalah">
+            <label class="priority-option"><input type="radio" name="priority" value="Low"><span class="priority-pill low">Low</span></label>
+            <label class="priority-option"><input type="radio" name="priority" value="Medium" checked><span class="priority-pill medium">Medium</span></label>
+            <label class="priority-option"><input type="radio" name="priority" value="High"><span class="priority-pill high">High</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="description">Deskripsi Masalah <span class="required">*</span></label>
+          <textarea id="description" name="description" maxlength="700" placeholder="Jelaskan kronologi, lokasi unit, dan dampaknya terhadap operasional." required></textarea>
+        </div>
+
+        <div class="field">
+          <label for="reportedBy">Nama Pelapor <span class="required">*</span></label>
+          <input id="reportedBy" name="reportedBy" type="text" maxlength="70" placeholder="Nama karyawan" required>
+        </div>
+
+        <div class="field">
+          <label for="photo">Foto Pendukung</label>
+          <div class="photo-box">
+            <strong>Upload foto masalah</strong>
+            <input class="photo-input" id="photo" name="photo" type="file" accept="image/*" capture="environment">
+            <p>Opsional di UI-008. Penyimpanan Drive tetap melalui Controller/Service.</p>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <div class="action-row">
+      <button id="submitButton" class="submit-button" type="button" onclick="submitReportProblem()">Kirim Laporan</button>
+      <p class="helper-text">EXPOS akan membaca identitas dari session Google saat backend disambungkan.</p>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    function collectPayload() {
+      const form = document.getElementById('reportProblemForm');
+      const data = new FormData(form);
+      return {
+        branch: String(data.get('branch') || '').trim(),
+        category: String(data.get('category') || '').trim(),
+        title: String(data.get('title') || '').trim(),
+        priority: String(data.get('priority') || 'Medium').trim(),
+        description: String(data.get('description') || '').trim(),
+        reportedBy: String(data.get('reportedBy') || '').trim(),
+        hasPhoto: Boolean(document.getElementById('photo').files.length),
+        clientTimestamp: new Date().toISOString()
+      };
+    }
+
+    function validatePayload(payload) {
+      if (!payload.branch) return 'Cabang wajib dipilih.';
+      if (!payload.category) return 'Kategori wajib dipilih.';
+      if (!payload.title) return 'Judul masalah wajib diisi.';
+      if (!payload.description) return 'Deskripsi masalah wajib diisi.';
+      if (!payload.reportedBy) return 'Nama pelapor wajib diisi.';
+      return '';
+    }
+
+    function submitReportProblem() {
+      const payload = collectPayload();
+      const errorMessage = validatePayload(payload);
+      if (errorMessage) {
+        showToast(errorMessage);
+        return;
+      }
+
+      setSubmitting(true);
+
+      if (window.google && google.script && google.script.run && typeof google.script.run.submitReportProblem === 'function') {
+        google.script.run
+          .withSuccessHandler(function () {
+            setSubmitting(false);
+            resetForm();
+            showToast('Laporan berhasil dikirim.');
+          })
+          .withFailureHandler(function () {
+            setSubmitting(false);
+            showToast('Laporan belum berhasil dikirim. Coba lagi.');
+          })
+          .submitReportProblem(payload);
+        return;
+      }
+
+      window.setTimeout(function () {
+        setSubmitting(false);
+        showToast('UI-008 siap. Controller submitReportProblem belum disambungkan.');
+      }, 500);
+    }
+
+    function setSubmitting(isSubmitting) {
+      const button = document.getElementById('submitButton');
+      button.disabled = isSubmitting;
+      button.textContent = isSubmitting ? 'Mengirim...' : 'Kirim Laporan';
+    }
+
+    function resetForm() {
+      document.getElementById('reportProblemForm').reset();
+      const defaultPriority = document.querySelector('input[name="priority"][value="Medium"]');
+      if (defaultPriority) defaultPriority.checked = true;
+    }
+
+    function goBack() {
+      if (window.google && google.script && google.script.run && typeof google.script.run.openExposModule === 'function') {
+        google.script.run.openExposModule('home');
+        return;
+      }
+      showToast('Kembali ke Home Dashboard saat router disambungkan.');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      window.clearTimeout(showToast.timeoutId);
+      showToast.timeoutId = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 2600);
+    }
+  </script>
+</body>
+</html>
