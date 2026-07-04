@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EXPOS - Absensi</title>
+  <style>
+    :root {
+      --expos-blue: #0f3d73;
+      --expos-blue-2: #145aa0;
+      --expos-bg: #f4f7fb;
+      --expos-card: #ffffff;
+      --expos-text: #172033;
+      --expos-muted: #667085;
+      --expos-border: #e5eaf2;
+      --expos-green: #16a34a;
+      --expos-orange: #f97316;
+      --expos-red: #ef4444;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow-card: 0 12px 30px rgba(15, 61, 115, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--expos-bg);
+      color: var(--expos-text);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    .app-shell {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--expos-bg);
+      overflow-x: hidden;
+    }
+
+    .topbar {
+      padding: calc(env(safe-area-inset-top, 0px) + 16px) 16px 20px;
+      background: linear-gradient(160deg, var(--expos-blue), #092947);
+      color: #fff;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+
+    .topbar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .title-block { min-width: 0; }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.15;
+    }
+
+    .title-block p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      opacity: 0.82;
+      line-height: 1.3;
+    }
+
+    .content { padding: 16px 14px 28px; }
+
+    .status-card {
+      margin-top: -28px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: var(--expos-card);
+      border: 1px solid var(--expos-border);
+      box-shadow: var(--shadow-card);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .status-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: #dcfce7;
+      color: var(--expos-green);
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+    }
+
+    .status-card h2 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .status-card p {
+      margin: 5px 0 0;
+      color: var(--expos-muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .time-chip {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #eaf3ff;
+      color: var(--expos-blue-2);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .form-card {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: var(--expos-card);
+      border: 1px solid var(--expos-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--expos-text);
+    }
+
+    .required { color: var(--expos-red); }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--expos-border);
+      border-radius: 15px;
+      background: #fbfdff;
+      color: var(--expos-text);
+      padding: 12px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 86px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input:focus, select:focus, textarea:focus, button:focus-visible {
+      border-color: rgba(20, 90, 160, 0.7);
+      box-shadow: 0 0 0 3px rgba(20, 90, 160, 0.14);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .attendance-type {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+    }
+
+    .type-option input { display: none; }
+
+    .type-pill {
+      display: grid;
+      place-items: center;
+      min-height: 54px;
+      padding: 10px 8px;
+      border: 1px solid var(--expos-border);
+      border-radius: var(--radius-md);
+      background: #fbfdff;
+      color: var(--expos-muted);
+      font-size: 12px;
+      font-weight: 900;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .type-option input:checked + .type-pill.checkin {
+      border-color: #86efac;
+      background: #ecfdf3;
+      color: #166534;
+    }
+
+    .type-option input:checked + .type-pill.checkout {
+      border-color: #fdba74;
+      background: #fff7ed;
+      color: #9a3412;
+    }
+
+    .photo-box {
+      border: 1.5px dashed #c8d4e5;
+      border-radius: 16px;
+      padding: 13px;
+      background: #fbfdff;
+      text-align: center;
+    }
+
+    .photo-box strong {
+      display: block;
+      font-size: 12px;
+    }
+
+    .photo-box p {
+      margin: 5px 0 0;
+      color: var(--expos-muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .photo-input {
+      padding: 10px;
+      min-height: auto;
+      background: transparent;
+      border: 0;
+    }
+
+    .note-box {
+      margin-top: 12px;
+      padding: 11px 12px;
+      border-radius: 15px;
+      background: #fff7ed;
+      color: #9a3412;
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .action-row {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      padding: 12px 14px calc(env(safe-area-inset-bottom, 0px) + 14px);
+      background: linear-gradient(180deg, rgba(244,247,251,0), var(--expos-bg) 28%);
+      max-width: 390px;
+      margin: 0 auto;
+    }
+
+    .submit-button {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      background: var(--expos-green);
+      color: #fff;
+      min-height: 52px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 14px 26px rgba(22, 163, 74, 0.22);
+    }
+
+    .submit-button:disabled {
+      opacity: 0.62;
+      cursor: not-allowed;
+    }
+
+    .helper-text {
+      margin: 8px 0 0;
+      color: var(--expos-muted);
+      font-size: 10px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(120px);
+      width: min(358px, calc(100% - 28px));
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #172033;
+      color: #fff;
+      box-shadow: 0 16px 40px rgba(23, 32, 51, 0.24);
+      font-size: 13px;
+      line-height: 1.35;
+      opacity: 0;
+      pointer-events: none;
+      transition: 220ms ease;
+      z-index: 10;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 340px) {
+      .two-col, .attendance-type { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell" aria-label="Form Absensi EXPOS">
+    <header class="topbar">
+      <div class="topbar-row">
+        <button class="back-button" type="button" aria-label="Kembali" onclick="goBack()">‹</button>
+        <div class="title-block">
+          <h1>Absensi</h1>
+          <p>Catat kehadiran karyawan cabang secara mobile.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <article class="status-card">
+        <div class="status-icon" aria-hidden="true">✅</div>
+        <div>
+          <h2 id="greetingText">Selamat datang!</h2>
+          <p>Pastikan cabang dan tipe absensi sudah benar sebelum submit.</p>
+          <span id="timeChip" class="time-chip">--:-- WIB</span>
+        </div>
+      </article>
+
+      <form id="attendanceForm" class="form-card" novalidate>
+        <div class="field">
+          <label>Tipe Absensi <span class="required">*</span></label>
+          <div class="attendance-type" role="radiogroup" aria-label="Tipe absensi">
+            <label class="type-option">
+              <input type="radio" name="attendanceType" value="CHECK_IN" checked>
+              <span class="type-pill checkin">Masuk / Check In</span>
+            </label>
+            <label class="type-option">
+              <input type="radio" name="attendanceType" value="CHECK_OUT">
+              <span class="type-pill checkout">Pulang / Check Out</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="field">
+            <label for="branch">Cabang <span class="required">*</span></label>
+            <select id="branch" name="branch" required>
+              <option value="">Pilih cabang</option>
+              <option value="CBN">CBN</option>
+              <option value="ARH">ARH</option>
+              <option value="SLW">SLW</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="shift">Shift <span class="required">*</span></label>
+            <select id="shift" name="shift" required>
+              <option value="">Pilih shift</option>
+              <option value="Shift 1">Shift 1</option>
+              <option value="Shift 2">Shift 2</option>
+              <option value="Middle">Middle</option>
+              <option value="Full Day">Full Day</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="employeeName">Nama Karyawan <span class="required">*</span></label>
+          <input id="employeeName" name="employeeName" type="text" maxlength="70" placeholder="Nama karyawan" required>
+        </div>
+
+        <div class="field">
+          <label for="note">Catatan</label>
+          <textarea id="note" name="note" maxlength="300" placeholder="Opsional: contoh terlambat karena hujan / closing selesai lebih lambat."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="photo">Foto Selfie / Bukti Hadir</label>
+          <div class="photo-box">
+            <strong>Ambil foto dari kamera</strong>
+            <input class="photo-input" id="photo" name="photo" type="file" accept="image/*" capture="user">
+            <p>Opsional di UI-009. Penyimpanan Drive tetap melalui Controller/Service.</p>
+          </div>
+        </div>
+
+        <div class="note-box">
+          Identitas final tetap wajib divalidasi backend dari Google Session dan Master_User. Nama di form hanya temporary UI field.
+        </div>
+      </form>
+    </section>
+
+    <div class="action-row">
+      <button id="submitButton" class="submit-button" type="button" onclick="submitAttendance()">Submit Absensi</button>
+      <p class="helper-text">EXPOS tidak menulis Sheet langsung dari UI. Semua submit melewati Controller.</p>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    function initAttendanceForm() {
+      renderClock();
+      window.setInterval(renderClock, 30000);
+    }
+
+    function renderClock() {
+      const now = new Date();
+      const hour = now.getHours();
+      const greeting = hour < 11 ? 'Selamat pagi!' : hour < 15 ? 'Selamat siang!' : hour < 18 ? 'Selamat sore!' : 'Selamat malam!';
+      document.getElementById('greetingText').textContent = greeting;
+      document.getElementById('timeChip').textContent = new Intl.DateTimeFormat('id-ID', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Jakarta'
+      }).format(now) + ' WIB';
+    }
+
+    function collectPayload() {
+      const form = document.getElementById('attendanceForm');
+      const data = new FormData(form);
+      return {
+        attendanceType: String(data.get('attendanceType') || 'CHECK_IN').trim(),
+        branch: String(data.get('branch') || '').trim(),
+        shift: String(data.get('shift') || '').trim(),
+        employeeName: String(data.get('employeeName') || '').trim(),
+        note: String(data.get('note') || '').trim(),
+        hasPhoto: Boolean(document.getElementById('photo').files.length),
+        clientTimestamp: new Date().toISOString()
+      };
+    }
+
+    function validatePayload(payload) {
+      if (!payload.attendanceType) return 'Tipe absensi wajib dipilih.';
+      if (!payload.branch) return 'Cabang wajib dipilih.';
+      if (!payload.shift) return 'Shift wajib dipilih.';
+      if (!payload.employeeName) return 'Nama karyawan wajib diisi.';
+      return '';
+    }
+
+    function submitAttendance() {
+      const payload = collectPayload();
+      const errorMessage = validatePayload(payload);
+      if (errorMessage) {
+        showToast(errorMessage);
+        return;
+      }
+
+      setSubmitting(true);
+
+      if (window.google && google.script && google.script.run && typeof google.script.run.submitAttendance === 'function') {
+        google.script.run
+          .withSuccessHandler(function () {
+            setSubmitting(false);
+            resetForm();
+            showToast('Absensi berhasil dikirim.');
+          })
+          .withFailureHandler(function () {
+            setSubmitting(false);
+            showToast('Absensi belum berhasil dikirim. Coba lagi.');
+          })
+          .submitAttendance(payload);
+        return;
+      }
+
+      window.setTimeout(function () {
+        setSubmitting(false);
+        showToast('UI-009 siap. Controller submitAttendance belum disambungkan.');
+      }, 500);
+    }
+
+    function setSubmitting(isSubmitting) {
+      const button = document.getElementById('submitButton');
+      button.disabled = isSubmitting;
+      button.textContent = isSubmitting ? 'Mengirim...' : 'Submit Absensi';
+    }
+
+    function resetForm() {
+      document.getElementById('attendanceForm').reset();
+      const defaultType = document.querySelector('input[name="attendanceType"][value="CHECK_IN"]');
+      if (defaultType) defaultType.checked = true;
+    }
+
+    function goBack() {
+      if (window.google && google.script && google.script.run && typeof google.script.run.openExposModule === 'function') {
+        google.script.run.openExposModule('home');
+        return;
+      }
+      showToast('Kembali ke Home Dashboard saat router disambungkan.');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      window.clearTimeout(showToast.timeoutId);
+      showToast.timeoutId = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 2600);
+    }
+
+    document.addEventListener('DOMContentLoaded', initAttendanceForm);
+  </script>
+</body>
+</html>
