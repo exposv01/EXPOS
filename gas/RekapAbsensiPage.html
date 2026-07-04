@@ -1,0 +1,106 @@
+<section class="expos-section" data-expos-page="rekapAbsensi" hidden>
+  <div class="expos-stack">
+    <div class="expos-card expos-card-lg">
+      <button class="expos-button expos-button-secondary" type="button" data-expos-back>← Kembali</button>
+      <h1 class="expos-title" style="margin-top:16px;">Rekap Absensi</h1>
+      <p class="expos-muted" style="margin-bottom:0;">Lihat ringkasan absensi karyawan yang sudah tersimpan.</p>
+    </div>
+
+    <div class="expos-card expos-stack">
+      <button class="expos-button" type="button" id="rekapAbsensiRefreshButton">Refresh Rekap</button>
+      <div id="rekapAbsensiStatus" class="expos-muted">Tekan Refresh untuk memuat data absensi.</div>
+    </div>
+
+    <div class="expos-card" style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <thead>
+          <tr>
+            <th style="text-align:left; padding:10px 6px; border-bottom:1px solid var(--expos-border);">Tanggal</th>
+            <th style="text-align:left; padding:10px 6px; border-bottom:1px solid var(--expos-border);">Cabang</th>
+            <th style="text-align:left; padding:10px 6px; border-bottom:1px solid var(--expos-border);">Nama</th>
+            <th style="text-align:left; padding:10px 6px; border-bottom:1px solid var(--expos-border);">Jenis</th>
+          </tr>
+        </thead>
+        <tbody id="rekapAbsensiTableBody">
+          <tr>
+            <td colspan="4" class="expos-muted" style="padding:14px 6px; text-align:center;">Belum ada data dimuat.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+  function exposSetRekapAbsensiStatus(message) {
+    var status = document.getElementById('rekapAbsensiStatus');
+    if (status) {
+      status.textContent = message;
+    }
+  }
+
+  function exposRenderRekapAbsensiRows(records) {
+    var tableBody = document.getElementById('rekapAbsensiTableBody');
+
+    if (!tableBody) {
+      return;
+    }
+
+    if (!records || records.length === 0) {
+      tableBody.innerHTML = '<tr><td colspan="4" class="expos-muted" style="padding:14px 6px; text-align:center;">Belum ada data absensi.</td></tr>';
+      return;
+    }
+
+    tableBody.innerHTML = records.slice(-20).reverse().map(function(record) {
+      return '<tr>' +
+        '<td style="padding:10px 6px; border-bottom:1px solid var(--expos-border);">' + (record.Timestamp || '-') + '</td>' +
+        '<td style="padding:10px 6px; border-bottom:1px solid var(--expos-border);">' + (record.Cabang || '-') + '</td>' +
+        '<td style="padding:10px 6px; border-bottom:1px solid var(--expos-border);">' + (record['Nama Karyawan'] || '-') + '</td>' +
+        '<td style="padding:10px 6px; border-bottom:1px solid var(--expos-border);">' + (record['Jenis Absensi'] || '-') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function exposLoadRekapAbsensi() {
+    var button = document.getElementById('rekapAbsensiRefreshButton');
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Memuat...';
+    }
+
+    exposSetRekapAbsensiStatus('Mengambil data absensi...');
+
+    google.script.run
+      .withSuccessHandler(function(records) {
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Refresh Rekap';
+        }
+
+        exposRenderRekapAbsensiRows(records);
+        exposSetRekapAbsensiStatus('Data rekap absensi berhasil dimuat ✅');
+      })
+      .withFailureHandler(function(error) {
+        if (button) {
+          button.disabled = false;
+          button.textContent = 'Refresh Rekap';
+        }
+
+        exposSetRekapAbsensiStatus(error.message || 'Gagal memuat rekap absensi');
+      })
+      .getRekapAbsensi();
+  }
+
+  function exposBindRekapAbsensiPage() {
+    var button = document.getElementById('rekapAbsensiRefreshButton');
+
+    if (!button) {
+      return;
+    }
+
+    button.addEventListener('click', exposLoadRekapAbsensi);
+  }
+
+  document.addEventListener('DOMContentLoaded', exposBindRekapAbsensiPage);
+</script>
