@@ -1,0 +1,77 @@
+<script>
+  var EXPOS_NAVIGATION_ROUTES = {
+    DASHBOARD: 'dashboard',
+    REPORT_PROBLEM: 'reportProblem',
+    ABSENSI: 'absensi',
+    KASBON: 'kasbon',
+    IZIN: 'izin',
+    REKAP_ABSENSI: 'rekapAbsensi'
+  };
+
+  var EXPOS_NAVIGATION_TITLES = {};
+  EXPOS_NAVIGATION_TITLES[EXPOS_NAVIGATION_ROUTES.DASHBOARD] = 'Dashboard';
+  EXPOS_NAVIGATION_TITLES[EXPOS_NAVIGATION_ROUTES.REPORT_PROBLEM] = 'Report Problem';
+  EXPOS_NAVIGATION_TITLES[EXPOS_NAVIGATION_ROUTES.ABSENSI] = 'Absensi';
+  EXPOS_NAVIGATION_TITLES[EXPOS_NAVIGATION_ROUTES.KASBON] = 'Kasbon';
+  EXPOS_NAVIGATION_TITLES[EXPOS_NAVIGATION_ROUTES.IZIN] = 'Pengajuan Izin';
+  EXPOS_NAVIGATION_TITLES[EXPOS_NAVIGATION_ROUTES.REKAP_ABSENSI] = 'Rekap Absensi';
+
+  var EXPOS_NAVIGATION_STATE = {
+    currentRoute: EXPOS_NAVIGATION_ROUTES.DASHBOARD,
+    previousRoute: null
+  };
+
+  function exposNavigateTo(route) {
+    if (!route || route === EXPOS_NAVIGATION_STATE.currentRoute) {
+      return;
+    }
+
+    EXPOS_NAVIGATION_STATE.previousRoute = EXPOS_NAVIGATION_STATE.currentRoute;
+    EXPOS_NAVIGATION_STATE.currentRoute = route;
+
+    exposRenderRoute(route);
+  }
+
+  function exposGoBack() {
+    var targetRoute = EXPOS_NAVIGATION_STATE.previousRoute || EXPOS_NAVIGATION_ROUTES.DASHBOARD;
+    EXPOS_NAVIGATION_STATE.previousRoute = EXPOS_NAVIGATION_STATE.currentRoute;
+    EXPOS_NAVIGATION_STATE.currentRoute = targetRoute;
+    exposRenderRoute(targetRoute);
+  }
+
+  function exposRenderRoute(route) {
+    var pages = document.querySelectorAll('[data-expos-page]');
+
+    pages.forEach(function(page) {
+      page.hidden = page.getAttribute('data-expos-page') !== route;
+    });
+
+    var titleTarget = document.querySelector('[data-expos-route-title]');
+    if (titleTarget) {
+      titleTarget.textContent = EXPOS_NAVIGATION_TITLES[route] || 'EXPOS';
+    }
+
+    document.body.setAttribute('data-expos-current-route', route);
+  }
+
+  function exposBindNavigation() {
+    var triggers = document.querySelectorAll('[data-expos-route]');
+
+    triggers.forEach(function(trigger) {
+      trigger.addEventListener('click', function() {
+        exposNavigateTo(trigger.getAttribute('data-expos-route'));
+      });
+    });
+
+    var backTriggers = document.querySelectorAll('[data-expos-back]');
+
+    backTriggers.forEach(function(trigger) {
+      trigger.addEventListener('click', exposGoBack);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    exposBindNavigation();
+    exposRenderRoute(EXPOS_NAVIGATION_STATE.currentRoute);
+  });
+</script>
